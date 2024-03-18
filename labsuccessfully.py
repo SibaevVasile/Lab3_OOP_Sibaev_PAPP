@@ -164,7 +164,7 @@ class FileMonitor:
 def scheduled_detection(monitor):
     while True:
         monitor.monitor_folder()
-        monitor.commit()  # Automatically take a snapshot every 5 seconds
+        monitor.commit()  
         monitor.status()
         time.sleep(5)
 
@@ -172,7 +172,6 @@ if __name__ == "__main__":
     folder_path = r'C:\Users\vasil\OneDrive\Desktop\Catalin OOP\SibaevVasile_Lab3_PAPP_OOP'
     monitor = FileMonitor(folder_path)
 
-    # Start a separate thread for scheduled detection
     detection_thread = threading.Thread(target=scheduled_detection, args=(monitor,))
     detection_thread.start()
 
