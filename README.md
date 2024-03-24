@@ -12,7 +12,7 @@ Open your preferred Python compiler.
 Create a new Python file and paste the provided code into it.
 
 Folder Configuration:
-Locate line 172 in the code, where the folder path is specified.
+Locate line 197 in the code, where the folder path is specified.
 Replace the existing folder path with the location of the folder you want to monitor.
 Usage:
 Run the Program:
