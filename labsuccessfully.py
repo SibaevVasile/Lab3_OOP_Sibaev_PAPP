@@ -28,7 +28,7 @@ class TextFileInfo(FileInfo):
     def get_info(self):
         file_path = os.path.join(folder_path, self.filename)
         if os.path.exists(file_path):
-            with open(file_path, 'r') as f:
+            with open(file_path, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
             line_count = len(lines)
             word_count = sum(len(line.split()) for line in lines)
@@ -41,7 +41,7 @@ class PythonFileInfo(FileInfo):
     def get_info(self):
         file_path = os.path.join(folder_path, self.filename)
         if os.path.exists(file_path):
-            with open(file_path, 'r') as f:
+            with open(file_path, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
             line_count = len(lines)
             class_count = sum(1 for line in lines if line.strip().startswith('class '))
@@ -54,7 +54,7 @@ class JavaFileInfo(FileInfo):
     def get_info(self):
         file_path = os.path.join(folder_path, self.filename)
         if os.path.exists(file_path):
-            with open(file_path, 'r') as f:
+            with open(file_path, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
             line_count = len(lines)
             class_count = sum(1 for line in lines if line.strip().startswith('class '))
@@ -71,9 +71,7 @@ class FileMonitor:
         self.instance = FileInfo
         self.file_type = None
         self.lock = threading.Lock()
-
-    def commit(self):
-        self.snapshot_time = datetime.datetime.now()
+        self.commit_time = None
 
     def get_file_instance(self, filename):
         file_path = os.path.join(self.folder_path, filename)
@@ -96,7 +94,16 @@ class FileMonitor:
 
     def monitor_folder(self):
         with self.lock:
-            for filename in os.listdir(self.folder_path):
+            current_files = set(os.listdir(self.folder_path))
+
+            new_files = current_files - set(self.file_info.keys())
+            for new_file in new_files:
+                Instance = self.get_file_instance(new_file)
+                if Instance:
+                    self.file_info[new_file] = Instance(new_file).get_info()
+                    print(f"{new_file} - New File") 
+
+            for filename in current_files:
                 if os.path.isfile(os.path.join(self.folder_path, filename)):
                     Instance = self.get_file_instance(filename)
                     if Instance:
@@ -109,6 +116,8 @@ class FileMonitor:
                 file_instance = Instance(filename)
                 file_info = file_instance.get_info()
                 if file_info:
+                    log_message = f"{datetime.datetime.now()} - Info requested for {filename}\n"
+                    self.log_operation(log_message)
                     print(f"Name: {filename}")
                     print(f"Type: {self.file_type or file_instance.__class__.__name__}")
                     creation_time = os.path.getctime(os.path.join(self.folder_path, filename))
@@ -135,7 +144,7 @@ class FileMonitor:
         with self.lock:
             print("Status:")
             if not self.snapshot_time:
-                print("No snapshot taken. Use 'commit' to take a snapshot.")
+                print("No snapshot taken.")
                 return
 
             current_files = set(os.listdir(self.folder_path))
@@ -161,28 +170,47 @@ class FileMonitor:
                     else:
                         print(f"{filename} - Not found")
 
+    def commit(self):
+      with self.lock:
+        self.snapshot_time = datetime.datetime.now()
+        self.commit_time = self.snapshot_time.strftime("%Y-%m-%d_%H-%M-%S") 
+        
+        file_stats = "\nFile Statistics:\n"
+        for filename, info in self.file_info.items():
+            file_stats += f"{filename} - {info}\n"
+
+        log_message = f"{self.commit_time} - Manual commit performed\n{file_stats}\n"
+        print("Snapshot taken.")
+        
+        commit_filename = os.path.join(folder_path, f"commit_{self.commit_time}.txt")
+        with open(commit_filename, "w") as commit_file:
+            commit_file.write(log_message)
+
+
 def scheduled_detection(monitor):
     while True:
         monitor.monitor_folder()
-        monitor.commit()  
         monitor.status()
         time.sleep(5)
 
 if __name__ == "__main__":
     folder_path = r'C:\Users\vasil\OneDrive\Desktop\Catalin OOP\SibaevVasile_Lab3_PAPP_OOP'
     monitor = FileMonitor(folder_path)
-
+    # Start a separate thread for scheduled detection
     detection_thread = threading.Thread(target=scheduled_detection, args=(monitor,))
     detection_thread.start()
 
     while True:
         command = input(
-            "Enter command (info <filename>/status/exit): ").strip().split()
+            "Enter command (info <filename>/commit/status/exit): ").strip().split()
         if command[0] == 'info' and len(command) == 2:
             monitor.info(command[1])
+        elif command[0] == 'commit':
+            monitor.commit()
         elif command[0] == 'status':
             monitor.status()
         elif command[0] == 'exit':
             break
         else:
             print("Invalid command. Please try again.")
+
