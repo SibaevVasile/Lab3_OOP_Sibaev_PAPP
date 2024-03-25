@@ -1,42 +1,54 @@
-User manual for my Python code:
+**Manual de utilizare File Monitor**
 
-This program is designed to monitor changes within a specific folder on your computer and provide information about the files within it. It detects modifications such as creations, deletions, and updates, and provides detailed information about file types including images, text files, Python files, and Java files.
+Bun venit la File Monitor! Acest program este conceput pentru a vă ajuta să monitorizați și să gestionați fișierele dintr-un folder specificat. Mai jos este un ghid despre cum să utilizați eficient acest instrument:
 
-Setup:
-Environment Setup:
-Ensure you have Python installed on your system.
-The code is compatible with any Python compiler, such as Microsoft Visual Studio Code or any other Python compiler.
+### 1. Noțiuni introductive
+- Asigurați-vă că aveți Python instalat pe sistemul dvs. pentru a rula acest program.
+- Descărcați scriptul Python furnizat (`file_monitor.py`) și salvați-l în directorul preferat.
+- Deschideți un prompt de comandă sau o fereastră de terminal.
+- Navigați la directorul în care ați salvat `file_monitor.py`.
 
-Code Integration:
-Open your preferred Python compiler.
-Create a new Python file and paste the provided code into it.
+### 2. Rularea programului
+- Pentru a porni File Monitor, rulați scriptul tastând `python file_monitor.py` și apăsând Enter.
+- Programul vă va solicita comenzi pentru a executa diverse operații.
 
-Folder Configuration:
-Locate line 197 in the code, where the folder path is specified.
-Replace the existing folder path with the location of the folder you want to monitor.
-Usage:
-Run the Program:
-Execute the Python script in your compiler.
+### 3. Comenzi disponibile
+- **info <nume fișier>**: Preluați informații despre un anumit fișier. Înlocuiți `<filename>` cu numele fișierului pe care doriți să-l inspectați. Această comandă oferă detalii precum tipul fișierului, data creării, data modificării și informații suplimentare specifice tipului de fișier (de exemplu, dimensiunea imaginii, numărul de linii etc.).
+   - Exemplu: `info example.txt`
 
-Interacting with the Program:
-The program will continuously monitor the specified folder for changes.
+- **commit**: faceți un instantaneu al stării curente a folderului monitorizat. Această acțiune înregistrează detalii despre toate fișierele din folder în acel moment.
+   - Exemplu: `commit`
 
-You will be prompted to enter commands in the terminal:
-info <filename>: Provides detailed information about a specific file within the monitored folder.
-status: Displays the current status of the monitored folder, including new files, deleted files, and changes.
-exit: Terminates the program.
+- **stare**: vizualizați starea curentă a folderului monitorizat, inclusiv orice modificări de la ultimul instantaneu. Această comandă afișează fișiere noi, fișiere șterse și fișiere care au fost modificate.
+   - Exemplu: `status`
 
-Command Usage:
-Enter info <filename> to retrieve information about a specific file within the monitored folder.
-Enter status to view the current status of the monitored folder, including any changes detected since the last snapshot.
-Enter exit to terminate the program.
+- **exit**: Terminați programul și ieșiți.
+   - Exemplu: `ieșire`
 
-Additional Notes:
-The program automatically updates itself every 5 seconds to ensure real-time monitoring of the folder.
-New files, deleted files, and changes to existing files are detected and reported.
-Detailed information is provided for different file types, including image size, text file statistics (line count, word count, character count), Python file statistics (line count, class count, method count), and Java file statistics (line count, class count, method count).
+### 4. Monitorizarea modificărilor folderului
+- Monitorul de fișiere verifică în mod continuu modificările în folderul specificat.
+- Detectează fișiere noi, fișiere șterse și modificări ale fișierelor existente.
+- Procesul de monitorizare rulează în fundal, permițându-vă să efectuați alte operațiuni în timp ce rulează.
 
-Troubleshooting:
-Ensure the folder path specified in the code is correct.
-Make sure Python is installed and properly configured on your system.
-If encountering issues, verify that the code is correctly pasted into your Python file.
+### 5. Detectare programată
+- Programul efectuează automat monitorizarea folderelor la intervale regulate.
+- La fiecare 5 secunde, programul scanează folderul pentru modificări și actualizează starea în consecință.
+
+### 6. Commit manual
+- Puteți declanșa manual un instantaneu al stării curente a folderului folosind comanda `commit`.
+- Această acțiune captează toate detaliile fișierului și le salvează pentru referință.
+- Instantaneul include informații despre numele fiecărui fișier și statisticile corespunzătoare.
+
+### 7. Ieșirea din program
+- Pentru a ieși din File Monitor, tastați pur și simplu `exit` și apăsați Enter.
+- Asigurați-vă că salvați toate informațiile necesare înainte de a ieși.
+
+### 8. Notă
+- Acest program acceptă diferite tipuri de fișiere, inclusiv fișiere text, fișiere Python, fișiere Java și imagini.
+- Oferă informații specifice, adaptate fiecărui tip de fișier atunci când se regăsesc detaliile fișierului.
+
+### 9. Depanare
+- Dacă întâmpinați probleme sau erori în timpul utilizării programului, consultați ieșirea consolei pentru mesaje de eroare.
+- Asigurați-vă că calea folderului specificată este corectă și accesibilă.
+
+Vă mulțumim pentru utilizarea File Monitor. Monitorizare fericită!
