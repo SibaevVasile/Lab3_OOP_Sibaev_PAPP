@@ -1,5 +1,7 @@
 **Manual de utilizare File Monitor**
 
+Șibaev Vasile
+
 Bun venit la File Monitor! Acest program este conceput pentru a vă ajuta să monitorizați și să gestionați fișierele dintr-un folder specificat. Mai jos este un ghid despre cum să utilizați eficient acest instrument:
 
 ### 1. Noțiuni introductive
